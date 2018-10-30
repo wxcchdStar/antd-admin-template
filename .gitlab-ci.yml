@@ -1,0 +1,55 @@
+# variables:
+#   SONAR_URL: "https://sonar.xxx.com"
+#   SONAR_LOGIN: "xxxxxx"
+
+# stages:
+#   - analysis
+#   - deploy
+
+# sonarqube_preview:
+#   stage: analysis
+#   except:
+#     - develop
+#     - master
+#   script:
+#     - sonar-scanner -Dsonar.projectKey=antd-admin-template -Dsonar.sources=src -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_LOGIN -Dsonar.analysis.mode=preview -Dsonar.gitlab.commit_sha=$(git log --pretty=format:%H origin/master..$CI_COMMIT_REF | tr '\n' ',') -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.unique_issue_per_inline=true
+
+# sonarqube_publish:
+#   stage: analysis
+#   script:
+#     - sonar-scanner -Dsonar.projectKey=antd-admin-template -Dsonar.sources=src -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_LOGIN
+#   only:
+#     - develop  
+
+# deploy_debug:
+#   stage: deploy
+#   tags: 
+#     - debug
+#   script:
+#     - npm install --prefer-offline || true
+#     - REACT_APP_API_DEBUG=true npm run build
+#     - sudo `which docker-compose` down
+#     - sudo docker rmi antd-admin-template || true
+#     - sudo `which docker-compose` build
+#     - sudo `which docker-compose` up -d
+#   environment:
+#     name: Debug
+#     url: http://testadmin.xxx.com
+#   only:
+#     - develop
+# deploy_release:
+#   stage: deploy
+#   tags: 
+#     - release
+#   script:
+#     - npm install --prefer-offline
+#     - REACT_APP_API_DEBUG=false npm run build
+#     - sudo `which docker-compose` down
+#     - sudo docker rmi antd-admin-template || true
+#     - sudo `which docker-compose` build
+#     - sudo `which docker-compose` up -d
+#   environment:
+#     name: Release
+#     url: http://admin.xxx.com
+#   only:
+#     - master

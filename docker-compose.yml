@@ -1,0 +1,10 @@
+version: "3"
+services:
+  antd-admin-template:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: antd-admin-template:1.0.0
+    container_name: antd-admin-template
+    ports:
+      - "5000:5000"
